@@ -1,10 +1,29 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../Redux/CartSlice'
+import { fetchProducts } from '../Redux/ProductSlice'
+import { Status } from '../Redux/ProductSlice'
 
-function Card({products}) {
+function Card() {
   const dispatch=useDispatch()
-   
+  const {data:products,status}=useSelector((state)=>state.product)
+  useEffect(()=>{
+    dispatch(fetchProducts())
+  },[])
+  
+  if(status===Status.LOADING){
+    return(
+      <div className=" mt-40 text-center">
+  <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-yellow-500 mx-auto" />
+  <h2 className="text-zinc-900 dark:text-white mt-4">Loading...</h2>
+  <p className="text-zinc-600 dark:text-zinc-400">
+    Your adventure is about to begin
+  </p>
+</div>
+
+    )
+    
+  }
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-4 place-content-center mt-10 ml-10'  >
       {
